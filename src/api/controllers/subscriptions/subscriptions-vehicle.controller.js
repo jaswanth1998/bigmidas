@@ -34,6 +34,7 @@ export default {
     var s = req.protocol + "://" + req.get("host");
 
     let { id } = req.params;
+    console.log("I am id",id);
     Subscription.aggregate([
       {
         $addFields: {

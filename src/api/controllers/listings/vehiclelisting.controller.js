@@ -4,32 +4,35 @@ import HttpStatus from "http-status-codes";
 import Vendor from "../../models/vendor/vendor.model";
 import VehicleReviews from "../../models/reviews/vehiclereview.model";
 import Subscription from "../../models/subscriptions/subscriptions.model";
+// subscriptions-vehicle.model.js
+import vechicleSubscriber from "../../models/subscriptions/subscriptions-vehicle.model";
 import Shoplisitng2 from "../../models/categories/shop-listing-cat.model";
 import Shoplisitng1 from "../../models/categories/shop-listing-sub-cat.model";
 // import Vendor from "../../models/vendor/vendor.model";
+import moment from "moment";
 
 import multer from "multer";
- 
+
 export default {
   async createshopcat(req, res) {
     //Validate the Request
-    let imgarr=[];
+    let imgarr = [];
 
     let schema = new Vechiclelisting({
       vechicle_catgory: req.body.vechicle_catgory,
       vechicle_type: req.body.vechicle_type,
-      vechicle_price:500,
+      vechicle_price: 500,
       city: req.body.city,
       area: req.body.area,
-      vehiclenumber:req.body.vehiclenumber,
+      vehiclenumber: req.body.vehiclenumber,
       address: req.body.address,
       category: req.body.category,
-      active:"true",
-      state:req.body.state,
+      active: "true",
+      state: req.body.state,
       pan_adhaar: req.files["pan_adhaar"][0].path,
       driving_license: req.files["driving_license"][0].path,
       insurance: req.files["insurance"][0].path,
-      images:req.files['images'][0].path,
+      images: req.files['images'][0].path,
       rc: req.files["rc"][0].path,
 
       // photo : req.file.path,
@@ -39,48 +42,50 @@ export default {
       // console.log('entered')
       // console.log('entered',req.files['fc'])
       schema.fc = req.files["fc"][0].path;
-    } 
+    }
     else {
     }
-    
-    for(let i=0;i<req.files['images'].length;i++){
+
+    for (let i = 0; i < req.files['images'].length; i++) {
       console.log("hello");
       imgarr.push(req.files['images'][i].path);
     }
     schema.images = imgarr;
-    
+
     console.log(req.files);
     Vechiclelisting.create(schema)
-      .then((Users) => { Vendor.findByIdAndUpdate(
-        {_id: req.body.vendorid},
-        {
-          km_charges:req.body.vehicle_price,
-        }).then((res)=>{console.log(res)}); res.json(Users)})
+      .then((Users) => {
+        Vendor.findByIdAndUpdate(
+          { _id: req.body.vendorid },
+          {
+            km_charges: req.body.vehicle_price,
+          }).then((res) => { console.log(res) }); res.json(Users)
+      })
       .catch((err) => res.status(500).json(err));
   },
 
-  async getactive(req,res){
+  async getactive(req, res) {
     let { id } = req.params;
-    Vechiclelisting.find({vendorid:id}).then((result)=>{
+    Vechiclelisting.find({ vendorid: id }).then((result) => {
       console.log(result);
-      res.send({status: result[0].active});
+      res.send({ status: result[0].active });
     });
   },
 
-  async getlocationdetails(req,res){
+  async getlocationdetails(req, res) {
     let { id } = req.params;
 
-    Vechiclelisting.find({vendorid : id}, function (err, docs) {
-      if (err){
-          console.log(err);
+    Vechiclelisting.find({ vendorid: id }, function (err, docs) {
+      if (err) {
+        console.log(err);
       }
-      else{
-          console.log("Result : ", docs);
-          // var result=docs;
-          // console.log("Result : ", result);
-          res.send(docs[0]._id);
+      else {
+        console.log("Result : ", docs);
+        // var result=docs;
+        // console.log("Result : ", result);
+        res.send(docs[0]._id);
       }
-  });
+    });
 
   },
   async editactive(req, res) {
@@ -103,10 +108,10 @@ export default {
       });
   },
 
-  async getvehicledetails(req,res){
+  async getvehicledetails(req, res) {
     let { id } = req.params;
 
-    Vechiclelisting.find({_id: id}).then( async (resp)=>{
+    Vechiclelisting.find({ _id: id }).then(async (resp) => {
       console.log(resp);
 
       // await Shoplisitng2.findById(resp[0].category).then(result=>{
@@ -121,7 +126,7 @@ export default {
       //   else{
       //     console.log(result1);
       //     resp[0].sub_cat = result1.sub_cat_name;
-          
+
       //   }
       //   console.log(result1);
       //   // resp[0].subcategory = result1.cat_name;
@@ -134,13 +139,14 @@ export default {
       //   else{
       //     console.log(result2);
       //     resp[0].vendorid = result2.name;
-          
+
       //   }
       //   console.log(result2);
       //   // resp[0].subcategory = result1.cat_name;
       // });
 
-      res.send(resp)})
+      res.send(resp)
+    })
   },
 
   findAll(req, res, next) {
@@ -208,11 +214,11 @@ export default {
           createddate: "$createddate",
         },
       },
-    //   { $unwind: "$vehicle_category" },
-    //   { $unwind: "$vehicle_type" },
-    //   { $unwind: "$vendor" },
-    //   // { $unwind: "$category" },
-    //   { $unwind: "$review" },
+      //   { $unwind: "$vehicle_category" },
+      //   { $unwind: "$vehicle_type" },
+      //   { $unwind: "$vendor" },
+      //   // { $unwind: "$category" },
+      //   { $unwind: "$review" },
     ]).then((vechicle) => res.json(vechicle.reverse()));
   },
   findAll1(req, res, next) {
@@ -280,7 +286,7 @@ export default {
           address: "$address",
           pan_adhaar: "$pan_adhaar",
           driving_license: "$driving_license",
-          images:"$images",
+          images: "$images",
           rc: "$rc",
           fc: "$fc",
           vehicle_category: "$get_cateogires.cat_name",
@@ -296,7 +302,7 @@ export default {
       // { $unwind: "$vendor" },
       // { $unwind: "$category" },
       // { $unwind: "$review" },
-    ]).then((vechicle) =>{console.log(vechicle); res.json(vechicle) });
+    ]).then((vechicle) => { console.log(vechicle); res.json(vechicle) });
   },
   Updatecat(req, res) {
     let { id } = req.params;
@@ -360,27 +366,27 @@ export default {
   },
 
 
-  async getvehicleimage(req,res){
+  async getvehicleimage(req, res) {
     let { id } = req.params;
     let { path } = req.params;
     console.log(id, path);
     Vechiclelisting.findOneAndUpdate(
-      {vendorid: id },
-      { $pull: { images: "uploads/"+path } },
-    ).then((result)=>{console.log(result); res.send(result)})
+      { vendorid: id },
+      { $pull: { images: "uploads/" + path } },
+    ).then((result) => { console.log(result); res.send(result) })
 
   },
 
-  async addvehicleimages(req,res){
-    let imgpath=[];
+  async addvehicleimages(req, res) {
+    let imgpath = [];
     console.log(req);
-    for(let i=0;i<req.files['images'].length;i++){
+    for (let i = 0; i < req.files['images'].length; i++) {
       imgpath.push(req.files['images'][i].path);
     }
     Vechiclelisting.findOneAndUpdate(
-      {vendorid: req.body.vendorid },
+      { vendorid: req.body.vendorid },
       { $push: { images: imgpath } },
-    ).then((result)=>{console.log(result); res.send({msg:"done"})})
+    ).then((result) => { console.log(result); res.send({ msg: "done" }) })
   },
 
   async findOrders(req, res) {
@@ -505,7 +511,7 @@ export default {
         { $unwind: "$bookingfrom" },
         { $unwind: "$bookingto" },
         { $unwind: "$distance" },
-        { $unwind: "$status"},
+        { $unwind: "$status" },
         { $unwind: "$orederid" },
         { $unwind: "$createdAt" },
       ])
@@ -719,30 +725,30 @@ export default {
     // ])
     VehicleReviews.aggregate([
       {
-        $addFields:{
-          conver1: {$toString: id},
+        $addFields: {
+          conver1: { $toString: id },
         }
       },
       {
         $match: { $expr: { $and: [{ $eq: ["$vehicle_id", "$conver1"] }] } },
       },
       {
-        $addFields:{
-          conver2:{$toObjectId: "$customer_id"}
+        $addFields: {
+          conver2: { $toObjectId: "$customer_id" }
         }
       },
       {
-        $lookup:{
-          from:"customer-details",
-          localField:"conver2",
-          foreignField:"_id",
-          as:"getcustomerdetails"
+        $lookup: {
+          from: "customer-details",
+          localField: "conver2",
+          foreignField: "_id",
+          as: "getcustomerdetails"
         }
       },
       {
-        $project:{
-          review:"$review",
-          rating:"$rating",
+        $project: {
+          review: "$review",
+          rating: "$rating",
           customerid: "$customer_id",
           customername: "$getcustomerdetails.name",
           customerimage: "$getcustomerdetails.customerpic",
@@ -750,163 +756,211 @@ export default {
         }
       }
     ])
-    .then((vechicle) => res.json(vechicle));
+      .then((vechicle) => res.json(vechicle));
   },
   findvendordetails(req, res, next) {
-    let {id} = req.params;
- 
-    Vechiclelisting.aggregate([
-       {
-         $addFields: {
-           convertedId2: { $toObjectId: "$vendorid" },
-           convertedId5: { $toString: "$_id" },
-         },
-       },
-       {
-         $match: { convertedId5: { $eq: id } },
-       },
-       {
-         $lookup: {
-           from: "vendor-details",
-           localField: "convertedId2",
-           foreignField: "_id",
-           as: "vendor_details",
-         },
-       },
-      {
-        $project:{
-         vendor_id:"$vendor_details._id",
-         serviceprovidername:"$vendor_details.name",
-         call:"$vendor_details.phonenumber",
-         km_serving:"$vendor_details.km_serving",
-        }
-      }
-     
-     ]).then((vechicle) => res.json(vechicle));
-   },
-   findvendordbycat(req, res, next) {
-    let {id} = req.params;
- 
-    Vechiclelisting.aggregate([
-       {
-         $addFields: {
-           convertedId2: { $toObjectId: "$vendorid" },
-           convertedvehicletype: { $toObjectId: "$vechicle_type" },
-           convertedId5: { $toString: "$_id" },
-           convertedId7: {$toString: "$vechicle_price"}
-         },
-       },
-       {
-         $match: { vechicle_catgory: { $eq: id } },
-       },
-       {
-         $lookup: {
-           from: "vendor-details",
-           localField: "convertedId2",
-           foreignField: "_id",
-           as: "vendor_details",
-         },
-       },
-       {
-         $lookup:{
-           from: "vehiclelisting-sub-cats",
-           localField:"convertedvehicletype",
-           foreignField: "_id",
-           as: "subcat"
-         }
-       },
-      {
-        $project:{
-         vendor_id:"$vendor_details._id",
-         serviceprovidername:"$vendor_details.name",
-         vehicle_subcategory:"$subcat.sub_cat_name",
-         price:"$convertedId7",
-         active:"$active",
-         call:"$vendor_details.phonenumber",
-         km_serving:"$vendor_details.vehicle_km_serving",
-         km_charges:"$vendor_details.km_charges",
-         image: '$images',
-         current_location:"$current_location"
-        }
-      }
-     
-     ]).then( async (vechicle) =>{
-      
-      for(let i=0;i<vechicle.length;i++){
-        if(vechicle[i].vendor_id.length==0){
-          console.log("this is null",vechicle[i].vendor_id);
-        }
-        else{
-      await Subscription.aggregate([
-        {
-          $addFields: {
-            convertedId1: { $toString: vechicle[i].vendor_id[0] },
-            convertedId2: { $toObjectId: "$plan_id" },
-          },
-        },
-        {
-          $match: { $expr: { $and: [{ $eq: ["$vendor_id", "$convertedId1"] }] } },
-        },
-        {
-          $lookup: {
-            from: "subscriptions",
-            localField: "convertedId2",
-            foreignField: "_id",
-            as: "get_subplan",
-          },
-        },
-        {
-          $addFields: {
-            days: "$get_subplan.days",
-            days: "$get_subplan.days",
-          },
-        },
-  
-        { $unwind: "$days" },
-        {
-          $group: {
-            _id: "$vendor_id",
-            days: { $sum: "$days" },
-            createdat: { $first: "$createdat" },
-            //   msid:{ $sum: 1},
-          },
-        },
-        {
-          $project: {
-            days: "$days",
-            daysremaining: {
-              $divide: [
-                { $subtract: [new Date(), "$createdat"] },
-                1000 * 60 * 60 * 24,
-              ],
-            },
-          },
-        },
-        {
-          $addFields:{
-            conver: { $subtract: [ "$days", "$daysremaining"] }
-          }
-        },
-        {
-          $project: {
-            totaldayssubscribed: "$days",
-            daysremaining: { $round: ["$conver", 0] },
-          },
-        },
-      ]).then((resp) => {if(resp.length==0){ vechicle[i].daysremaining = -10}else{vechicle[i].daysremaining = resp[0].daysremaining}
-    }).catch(err=>{
-      console.log(err);
-    });
-      console.log("this is response",i ,vechicle[i]);
-    }  
-    }
-    
-      res.json(vechicle);
-      
-     });
-   },
+    let { id } = req.params;
 
-   async updatedriverlocation(req,res){
+    Vechiclelisting.aggregate([
+      {
+        $addFields: {
+          convertedId2: { $toObjectId: "$vendorid" },
+          convertedId5: { $toString: "$_id" },
+        },
+      },
+      {
+        $match: { convertedId5: { $eq: id } },
+      },
+      {
+        $lookup: {
+          from: "vendor-details",
+          localField: "convertedId2",
+          foreignField: "_id",
+          as: "vendor_details",
+        },
+      },
+      {
+        $project: {
+          vendor_id: "$vendor_details._id",
+          serviceprovidername: "$vendor_details.name",
+          call: "$vendor_details.phonenumber",
+          km_serving: "$vendor_details.km_serving",
+        }
+      }
+
+    ]).then((vechicle) => res.json(vechicle));
+  },
+  findvendordbycat(req, res, next) {
+    let { id } = req.params;
+
+    Vechiclelisting.aggregate([
+      {
+        $addFields: {
+          convertedId2: { $toObjectId: "$vendorid" },
+          convertedvehicletype: { $toObjectId: "$vechicle_type" },
+          convertedId5: { $toString: "$_id" },
+          convertedId7: { $toString: "$vechicle_price" }
+        },
+      },
+      {
+        $match: { vechicle_catgory: { $eq: id } },
+      },
+      {
+        $lookup: {
+          from: "vendor-details",
+          localField: "convertedId2",
+          foreignField: "_id",
+          as: "vendor_details",
+        },
+      },
+      {
+        $lookup: {
+          from: "vehiclelisting-sub-cats",
+          localField: "convertedvehicletype",
+          foreignField: "_id",
+          as: "subcat"
+        }
+      },
+      {
+        $project: {
+          vendor_id: "$vendor_details._id",
+          serviceprovidername: "$vendor_details.name",
+          vehicle_subcategory: "$subcat.sub_cat_name",
+          price: "$convertedId7",
+          active: "$active",
+          call: "$vendor_details.phonenumber",
+          km_serving: "$vendor_details.vehicle_km_serving",
+          km_charges: "$vendor_details.km_charges",
+          image: '$images',
+          current_location: "$current_location"
+        }
+      }
+
+    ]).then(async (vechicle) => {
+
+      for (let i = 0; i < vechicle.length; i++) {
+        if (vechicle[i].vendor_id.length == 0) {
+          // console.log("this is null", vechicle[i].vendor_id);
+        }
+        else {
+
+          await vechicleSubscriber.aggregate([
+            {
+              $addFields: {
+                convertedId1: { $toString: vechicle[i].vendor_id },
+                convertedId2: { $toObjectId: "$plan_id" },
+              },
+            },
+            {
+              $match: { $expr: { $and: [{ $eq: ["$vendor_id", "$convertedId1"] }] } },
+            },
+            {
+              $lookup: {
+                from: "subscriptions-vehicle-plans",
+                localField: "convertedId2",
+                foreignField: "_id",
+                as: "get_subplan",
+              },
+            },
+            {
+              $addFields: {
+                days: "$get_subplan.days",
+                days: "$get_subplan.days",
+              },
+            },
+      
+            { $unwind: "$days" },
+            {
+              $group: {
+                _id: "$vendor_id",
+                days: { $sum: "$days" },
+                createdat: { $first: "$createdat" },
+                //   msid:{ $sum: 1},
+              },
+            },
+            {
+              $project: {
+                days: "$days",
+                daysremaining: {
+                  $divide: [
+                    { $subtract: [new Date(), "$createdat"] },
+                    1000 * 60 * 60 * 24,
+                  ],
+                },
+              },
+            },
+            {
+              $addFields: {
+                conver: { $subtract: ["$days", "$daysremaining"] }
+              }
+            },
+            {
+              $project: {
+                totaldayssubscribed: "$days",
+                daysremaining: { $round: ["$conver", 0] },
+              },
+            },
+        
+            // {
+            //   $addFields: {
+            //     days: "$get_subplan.days",
+            //     days: "$get_subplan.days",
+            //   },
+            // },
+
+            // { $unwind: "$days" },
+            // {
+            //   $group: {
+            //     _id: "$vendor_id",
+            //     days: { $sum: "$days" },
+            //     createdat: { $first: "$createdat" },
+            //     //   msid:{ $sum: 1},
+            //   },
+            // },
+            // {
+            //   $project: {
+            //     days: "$days",
+            //     daysremaining: {
+            //       $divide: [
+            //         { $subtract: [new Date(), "$createdat"] },
+            //         1000 * 60 * 60 * 24,
+            //       ],
+            //     },
+            //   },
+            // },
+            // {
+            //   $addFields:{
+            //     conver: { $subtract: [ "$days", "$daysremaining"] }
+            //   }
+            // },
+            // {
+            //   $project: {
+            //     totaldayssubscribed: "$days",
+            //     dateSubscribed: "$createdat",
+            //     daysremaining:"$get_subplan.days",
+            //   },
+            // },
+          ]).then((resp) => {
+            console.log("resp123", resp);
+            if (resp.length == 0) { 
+              vechicle[i].daysremaining = -10 
+            } else {
+               vechicle[i].daysremaining = resp[0] .daysremaining
+              //  vechicle[i].daysremaining =   moment(resp[0] .createdat).add(resp[0]. get_subplan.days,"days")  .diff(moment(),"days") 
+              }
+          }).catch(err => {
+            console.log(err);
+          });
+          console.log("this is response", i, vechicle[i]);
+        }
+      }
+
+      res.json(vechicle);
+
+    });
+  },
+
+  async updatedriverlocation(req, res) {
 
     let { id } = req.params;
     let vid = id.split("&&")[0];
@@ -926,5 +980,5 @@ export default {
         res.send({ msg: err });
       });
   },
- };
+};
 

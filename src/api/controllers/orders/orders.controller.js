@@ -379,6 +379,7 @@ export default {
             customfield: {
               $switch: {
                 branches: [
+                  { case: { $eq: ["$status", 0] }, then: "rejected" },
                   { case: { $eq: ["$status", 1] }, then: "pending" },
                   { case: { $eq: ["$status", 2] }, then: "confirm" },
                 ],
@@ -484,6 +485,7 @@ export default {
             customfield: {
               $switch: {
                 branches: [
+                  { case: { $eq: ["$status", 0] }, then: "rejected" },
                   { case: { $eq: ["$status", 1] }, then: "pending" },
                   { case: { $eq: ["$status", 2] }, then: "confirm" },
                 ],
@@ -619,12 +621,13 @@ export default {
             totalprice:"$totalprice",
             // delivery_charges: "$get_customer_details.delivery_charges",
             // free_delivery_above: "$get_customer_details.free_delivery_above",
-            //status: "$status",
+            status: "$status",
             orederid: "$orederid",
             ordertime: "$timeoforder",
             customfield: {
               $switch: {
                 branches: [
+                  { case: { $eq: ["$status", 0] }, then: "rejected" },
                   { case: { $eq: ["$status", 1] }, then: "pending" },
                   { case: { $eq: ["$status", 2] }, then: "confirm" },
                 ],
@@ -733,6 +736,7 @@ export default {
             customfield: {
               $switch: {
                 branches: [
+                  { case: { $eq: ["$status", 0] }, then: "rejected" },
                   { case: { $eq: ["$status", 1] }, then: "pending" },
                   { case: { $eq: ["$status", 2] }, then: "confirm" },
                 ],

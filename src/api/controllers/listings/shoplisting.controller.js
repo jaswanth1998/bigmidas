@@ -323,18 +323,18 @@ export default {
 
   async getlocationdetails(req, res) {
     
-    // let { id } = req.params;
+    let { id } = req.params;
     
 
-    // Shoplisitng.find({ vendorid: id }, function (err, docs) {
-    //   if (err) {
-    //     console.log(err);
-    //   }
-    //   else {
-    //     console.log("Result : ", docs);
-    //     res.send({ result: docs });
-    //   }
-    // });
+    Shoplisitng.find({ vendorid: id }, function (err, docs) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log("Result : ", docs);
+        res.send({ result: docs });
+      }
+    });
 
   },
 

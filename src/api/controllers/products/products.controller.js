@@ -250,7 +250,7 @@ async getProductsByShop(req, res) {
    {
         $addFields: {
           convertedId3: { $toObjectId: "$vendorid" },
-          convertedId4: { $toObjectId: "$category" },
+          convertedId4:  "$category" ,
           convertedId9: { $toObjectId: "$subcategory" },
         },
       },

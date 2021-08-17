@@ -86,6 +86,7 @@ export default {
             customfield: {
               $switch: {
                 branches: [
+                  { case: { $eq: ["$status", 0] }, then: "rejected" },
                   { case: { $eq: ["$status", 1] }, then: "pending" },
                   { case: { $eq: ["$status", 2] }, then: "confirm" },
                 ],
@@ -171,6 +172,7 @@ export default {
             customfield: {
               $switch: {
                 branches: [
+                  { case: { $eq: ["$status", 0] }, then: "rejected" },
                   { case: { $eq: ["$status", 1] }, then: "pending" },
                   { case: { $eq: ["$status", 2] }, then: "confirm" },
                 ],
@@ -259,6 +261,7 @@ export default {
             customfield: {
               $switch: {
                 branches: [
+                  { case: { $eq: ["$status", 0] }, then: "rejected" },
                   { case: { $eq: ["$status", 1] }, then: "pending" },
                   { case: { $eq: ["$status", 2] }, then: "confirm" },
                 ],
@@ -344,6 +347,7 @@ export default {
             customfield: {
               $switch: {
                 branches: [
+                  { case: { $eq: ["$status", 0] }, then: "rejected" },
                   { case: { $eq: ["$status", 1] }, then: "pending" },
                   { case: { $eq: ["$status", 2] }, then: "confirm" },
                 ],

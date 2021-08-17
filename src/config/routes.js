@@ -215,7 +215,8 @@ router.post(
 );
 router.get("/deletestoreimage/:id/:path", shopController.getshopimage);
 router.post("/addstoreimages", uploaddoc.fields([{name:"images"}]),  shopController.addshopimages);
-// router.get("/storelocationdetails/:id", shopController.getlocationdetails);
+router.get("/storelocationdetails/:id", shopController.getlocationdetails);
+
 router.get("/getshopcat/:id", shopController.getshopcat);
 router.put("/updatestorelocationdetails/:id", shopController.updatelocationdetails);
 router.get("/shoplist", shopController.findAll);
@@ -292,6 +293,7 @@ router.get("/deleteserviceimage/:id/:path", serviceController.getserviceimage);
 router.get("/getservicedetails/:id", serviceController.getservicedetails);
 router.post("/addserviceimages", uploaddoc.fields([{name:"images"}]),  serviceController.addserviceimages);
 router.get("/getservicelocation/:id", serviceController.getlocationdetails);
+router.get("/servicelocation/:id", serviceController.servicelocation);
 router.get("/servicelist", serviceController.findAll);
 router.get("/getserviceactive/:id", serviceController.getactive);
 router.put("/updatelocationdetails/:id", serviceController.updatelocationdetails);

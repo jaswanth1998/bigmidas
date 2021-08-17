@@ -3,6 +3,7 @@ import Servicelisting from "../../models/listings/servicelisting.model";
 import HttpStatus from "http-status-codes";
 import ServiceReviews from "../../models/reviews/reviewservice.model";
 import Subscription from "../../models/subscriptions/subscriptions.model";
+import ServiceSubscription from "../../models/subscriptions/subscriptions-service.model";
 import multer from "multer";
 
 export default {
@@ -438,6 +439,7 @@ export default {
           customfield: {
             $switch: {
               branches: [
+                { case: { $eq: ["$status", 0] }, then: "rejected" },
                 { case: { $eq: ["$status", 1] }, then: "pending" },
                 { case: { $eq: ["$status", 2] }, then: "confirm" },
               ],
@@ -764,11 +766,31 @@ export default {
         console.log("Result : ", docs);
         // var result=docs;
         // console.log("Result : ", result);
-        res.send(docs[0]);
+        // res.send(docs[0]); 
+        res.send(docs[0]._id);
       }
     });
 
   },
+
+  async servicelocation(req, res) {
+    let { id } = req.params;
+
+    Servicelisting.find({ vendorid: id }, function (err, docs) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log("Result : ", docs);
+        // var result=docs;
+        // console.log("Result : ", result);
+        // res.send(docs[0]); 
+        res.send({result:docs});
+      }
+    });
+  }
+,
+  
 
   async updatelocationdetails(req, res) {
     let { id } = req.params;
@@ -877,7 +899,7 @@ export default {
           console.log("this is null", vechicle[i].vendor_id);
         }
         else {
-          await Subscription.aggregate([
+          await ServiceSubscription.aggregate([
             {
               $addFields: {
                 convertedId1: { $toString: vechicle[i].vendor_id[0] },
@@ -889,7 +911,7 @@ export default {
             },
             {
               $lookup: {
-                from: "subscriptions",
+                from: "subscriptions-service-plans",
                 localField: "convertedId2",
                 foreignField: "_id",
                 as: "get_subplan",
