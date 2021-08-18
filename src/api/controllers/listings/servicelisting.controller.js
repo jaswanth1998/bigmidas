@@ -89,7 +89,7 @@ export default {
           city: "$city",
           area: "$area",
           address: "$address",
-          // images: "$images",
+          images: "$images",
           cat_name: "$get_cateogires.cat_name",
           createddate: "$createddate",
           pan_adhaar: "$pan_adhaar",

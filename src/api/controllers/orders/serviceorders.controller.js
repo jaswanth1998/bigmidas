@@ -228,8 +228,10 @@ export default {
       ).then((result)=>{
         sendnotificationtocustomer(custid,msg);
         console.log(result);
+        res.send({ msg: "Status updated" });
       }).catch((err) => {
         console.log(err);
+        res.send({ msg: "Status not updated" });
       });
   },
 
